@@ -1,0 +1,36 @@
+<odoo>
+
+<template id="mail_template_member_invoice">
+    <field name="name">Member Invoice Notification</field>
+    <field name="email_from">${(user.email or '')|safe}</field>
+    <field name="subject">Your Monthly Payment Invoice</field>
+    <field name="model_id" ref="account.model_account_move"/>
+    <field name="auto_delete" eval="False"/>
+    <field name="lang">${object.partner_id.lang}</field>
+    <field name="body_html">
+        <![CDATA[
+        <p>Dear ${object.partner_id.name},</p>
+        <p>Your monthly invoice has been generated:</p>
+        <ul>
+            <li>Total Amount Due: ${object.amount_total}</li>
+            <li>Due from previous months: ${object.due_amount}</li>
+        </ul>
+        <p>Please make the payment by the due date to avoid penalties.</p>
+        <p>Regards,</p>
+        <p>Your Company Name</p>
+        ]]>
+    </field>
+</template>
+
+<record id="ir_cron_generate_monthly_invoices" model="ir.cron">
+    <field name="name">Auto Generate Monthly Invoices</field>
+    <field name="model_id" ref="model_member_deposit"/>
+    <field name="state">code</field>
+    <field name="code">model.generate_monthly_invoices()</field>
+    <field name="interval_number">1</field>
+    <field name="interval_type">months</field>
+    <field name="numbercall">-1</field>
+    <field name="doall" eval="False"/>
+</record>
+
+</odoo>

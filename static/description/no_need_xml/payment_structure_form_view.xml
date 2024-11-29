@@ -1,0 +1,36 @@
+<odoo>
+    <record id="view_payment_structure_form" model="ir.ui.view">
+        <field name="name">payment.structure.form</field>
+        <field name="model">payment.structure</field>
+        <field name="arch" type="xml">
+            <form string="Payment Structure">
+                <sheet>
+                    <group>
+                        <field name="name" placeholder="Payment Structure Name"/>
+                        <field name="deposit_amount" placeholder="Deposit Amount"/>
+                        <field name="subscription_amount" placeholder="Subscription Amount"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_payment_structure_tree" model="ir.ui.view">
+        <field name="name">payment.structure.tree</field>
+        <field name="model">payment.structure</field>
+        <field name="arch" type="xml">
+            <tree string="Payment Structures">
+                <field name="name"/>
+                <field name="deposit_amount"/>
+                <field name="subscription_amount"/>
+            </tree>
+        </field>
+    </record>
+
+
+
+
+
+<!--    <menuitem id="menu_payment_structure_root" name="Payment Management" sequence="10"/>
+    <menuitem id="menu_payment_structure" name="Payment Structures" parent="menu_payment_structure_root" action="action_payment_structure"/>-->
+</odoo>

@@ -1,0 +1,352 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<odoo>
+
+    <record id="member_deposit_structure_form" model="ir.ui.view">
+        <field name="name">member.deposit.structure.form</field>
+        <field name="model">member.deposit.structure</field>
+        <field name="arch" type="xml">
+            <form string="Member Payment Structure">
+                <header>
+                        <button name="convert_to_product" type="object" string="Convert to Product"
+                        class="btn-primary"/>
+                        <field name="grand_total" readonly="1" widget="monetary" options="{'currency_field': 'currency_id'}" optional="show"/>
+<!--                    <button name="action_calculate_selected_total" string="Calculate Selected Total" type="object" class="oe_highlight"/>-->
+                </header>
+                <sheet>
+                    <group>
+                        <field name="payment_info"/>
+                        <field name="sl_no"/>
+                        <field name="deposit_amount"/>
+                        <field name="subscription_fee"/>
+                        <field name="extra_amount"/>
+                        <field name="start_date"/>
+                        <field name="end_date"/>
+                    </group>
+                    <group>
+                        <field name="total_years"/>
+                        <field name="total_months"/>
+                        <field name="subtotal_amount"/>
+                        <field name="subtotal_subscription_amount"/>
+                        <field name="total_amount_with_subscription"/>
+                        <field name="total_with_extra_amount"/>
+<!--                        <field name="grand_total_amount"/>-->
+                    </group>
+                    <group>
+                        <field name="is_selected" invisible="True"/>
+                        <field name="selected_total" readonly="1" invisible="True"/>
+                    </group>
+
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="member_deposit_structure_tree" model="ir.ui.view">
+        <field name="name">member.deposit.structure.tree</field>
+        <field name="model">member.deposit.structure</field>
+        <field name="arch" type="xml">
+            <tree string="Member Deposit Structure">
+<!--                <field name="is_selected" optional="show"/>-->
+                <field name="sequence" widget="handle" optional="show"/>
+<!--                <field name="payment_info" optional="show"/>-->
+                <field name="sl_no" optional="show"/>
+                <field name="deposit_amount" optional="show"/>
+                <field name="subscription_fee" optional="show"/>
+                <field name="extra_amount" sum="Total" optional="show"/>
+                <field name="start_date" optional="show"/>
+                <field name="end_date" optional="show"/>
+                <field name="total_years" optional="hide"/>
+                <field name="total_months" optional="show"/>
+                <field name="subtotal_amount" sum="subtotal" optional="show"/>
+                <field name="subtotal_subscription_amount" sum="Total Fee" optional="show"/>
+                <field name="total_amount_with_subscription" sum="Total with Fee" optional="show"/>
+                <field name="total_with_extra_amount" sum="Total" options="{'currency_field': 'currency_id'}" optional="show"/>
+                <field name="currency_id" invisible="1" optional="hide"/>
+
+            </tree>
+        </field>
+    </record>
+
+    <record id="ir_cron_update_last_line_end_date" model="ir.cron">
+        <field name="name">Update Last Line End Date</field>
+        <field name="model_id" ref="model_member_deposit_structure"/>
+        <field name="state">code</field>
+        <field name="code">model.update_last_line_end_date()</field>
+        <field name="active" eval="True"/>
+        <field name="interval_type">months</field>
+        <field name="interval_number">1</field>
+        <field name="numbercall">-1</field>
+    </record>
+
+    <record id="view_product_template_form_inherit" model="ir.ui.view">
+        <field name="name">product.template.form.inherit.member.deposit.structure</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="product.product_template_only_form_view"/>
+        <field name="arch" type="xml">
+
+            <!-- Example: Insert fields in the main form after the product name field -->
+            <xpath expr="//field[@name='detailed_type']" position="after">
+                <!-- Subscription Fee Field -->
+                <field name="subscription_fee" string="Subscription Fee"/>
+                <field name="extra_amount" string="Extra Amount"/>
+                <field name="deposit_amount" string="Monthly Amount"/>
+                <field name="start_date" string="Start Date"/>
+                <field name="end_date" string="End Date"/>
+                <field name="total_years" string="Total Years"/>
+                <field name="total_months" string="Total Months"/>
+                <field name="subtotal_amount" string="Total Amount"/>
+                <field name="subtotal_subscription_amount" string="Total Fee"/>
+                <field name="total_amount_with_subscription" string="Total With Fee"/>
+                <field name="total_with_extra_amount" string="Total with Extra" readonly="1"/>
+
+
+            </xpath>
+
+        </field>
+    </record>
+
+
+<record id="product_template_account_tree" model="ir.ui.view">
+    <field name="name">product.template.inherit.tree</field>
+    <field name="model">product.template</field>
+    <field name="inherit_id" ref="account.product_template_view_tree"/>
+    <field name="arch" type="xml">
+        <xpath expr="//field[@name='name']" position="after">
+
+            <field name="sequence" widget="handle" optional="show"/>
+
+            <field name="deposit_amount" optional="show"/>
+            <field name="subscription_fee" string="Fee" optional="show"/>
+            <field name="extra_amount" optional="show"/>
+            <field name="start_date" optional="show"/>
+            <field name="end_date" optional="show"/>
+            <field name="total_years" optional="hide"/>
+            <field name="total_months" optional="show"/>
+            <field name="subtotal_amount" optional="hide"/>
+            <field name="subtotal_subscription_amount" optional="hide"/>
+            <field name="total_amount_with_subscription" optional="hide"/>
+            <field name="total_with_extra_amount" optional="hide"/>
+        </xpath>
+
+        <xpath expr="//field[@name='list_price']" position="replace">
+            <field name="list_price" sum="Total" optional="show"/>
+        </xpath>
+    </field>
+</record>
+
+
+    <record id="view_product_product_form_inherit" model="ir.ui.view">
+        <field name="name">product.product.form.inherit</field>
+        <field name="model">product.product</field>
+        <field name="inherit_id" ref="product.product_normal_form_view"/>
+        <field name="arch" type="xml">
+
+            <!-- Example: Insert fields in the main form after the product name field -->
+            <xpath expr="//field[@name='detailed_type']" position="after">
+                <!-- Subscription Fee Field -->
+                <field name="subscription_fee" string="Subscription Fee"/>
+                <field name="extra_amount" string="Extra Amount"/>
+                <field name="deposit_amount" string="Monthly Amount"/>
+                <field name="start_date" string="Start Date"/>
+                <field name="end_date" string="End Date"/>
+                <field name="total_years" string="Total Years"/>
+                <field name="total_months" string="Total Months"/>
+                <field name="subtotal_amount" string="Total Amount"/>
+                <field name="subtotal_subscription_amount" string="Total Fee"/>
+                <field name="total_amount_with_subscription" string="Total With Fee"/>
+                <field name="total_with_extra_amount" string="Total with Extra" readonly="1"/>
+
+
+            </xpath>
+
+        </field>
+    </record>
+
+    <record id="view_order_form_inherit_member_deposit" model="ir.ui.view">
+        <field name="name">sale.order.line.form.inherit.member.deposit</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+              <xpath expr="//page/field[@name='order_line']/tree/field[@name='qty_delivered']" position="before">
+                <field name="deposit_amount" optional="show"/>
+                <field name="subscription_fee" string="Fee" optional="show"/>
+                <field name="extra_amount" optional="show"/>
+                <field name="start_date" optional="show"/>
+                <field name="end_date" optional="show"/>
+                <field name="total_years" optional="hide"/>
+                <field name="total_months" optional="show"/>
+                <field name="subtotal_amount" optional="hide"/>
+                <field name="subtotal_subscription_amount" optional="hide"/>
+                <field name="total_amount_with_subscription" optional="hide"/>
+                <field name="total_with_extra_amount" optional="hide"/>
+            </xpath>
+            <xpath expr="//page/field[@name='order_line']/form/group/group/div[@name='ordered_qty']/field[@name='product_uom_qty']" optional="hide"></xpath>
+
+        </field>
+    </record>
+
+    <record id="view_account_move_member_form" model="ir.ui.view">
+        <field name="name">account.move.line.inherit</field>
+        <field name="model">account.move</field>
+        <field name="inherit_id" ref="account.view_move_form"/>
+        <field name="arch" type="xml">
+
+           <field name="invoice_date" position="after">
+              <field name="current_base_amount" string="Current Base Amount" style="font-weight: bold;"/>
+<!--              <field name="total_current_base_amount" string="Current Base Amount" style="font-weight: bold;"/>-->
+            </field>
+
+
+            <xpath expr="//page[@name='invoice_tab']/field[@name='invoice_line_ids']/tree/field[@name='product_id']" position="after">
+                <field name="sequence" widget="handle" optional="show"/>
+                <field name="deposit_amount" optional="show"/>
+                <field name="subscription_fee" string="Fee" optional="show"/>
+                <field name="extra_amount" optional="show"/>
+                <field name="start_date" optional="show"/>
+                <field name="end_date" optional="show"/>
+                <field name="total_years" optional="hide"/>
+                <field name="total_months" optional="show"/>
+                <field name="subtotal_amount" optional="hide"/>
+                <field name="subtotal_subscription_amount" optional="hide"/>
+                <field name="total_amount_with_subscription" optional="hide"/>
+                <field name="total_with_extra_amount" optional="hide"/>
+            </xpath>
+
+            <xpath expr="//field[@name='amount_residual']" position="attributes">
+                <attribute name="name">amount_due</attribute>
+            </xpath>
+
+            <xpath expr="//field[@name='move_type']" position="attributes">
+                <attribute name="string">Payment Invoice</attribute>
+            </xpath>
+
+            <xpath expr="//label[contains(@for, 'partner_id')]" position="attributes">
+                <attribute name="string">Member</attribute>
+            </xpath>
+<!--
+            <xpath expr="//div[@name='move_type']/span[@raw-value='out_invoice']" position="replace">
+                    <span raw-value="out_invoice">Payment Invoice</span>
+            </xpath>
+-->
+
+        </field>
+    </record>
+
+
+
+        <record id="view_move_tree_inherit_member" model="ir.ui.view">
+            <field name="name">account.move.tree.inherit.member</field>
+            <field name="model">account.move</field>
+            <field name="inherit_id" ref="account.view_move_tree"/>
+            <field name="arch" type="xml">
+                <!-- Locate the field with 'Customer' and replace it -->
+                <xpath expr="//field[@name='invoice_partner_display_name'][@string='Customer']" position="attributes">
+                    <attribute name="string">Member</attribute>
+                </xpath>
+            </field>
+        </record>
+
+
+
+
+
+    <template id="report_invoice_document_inherit" inherit_id="account.report_invoice_document">
+
+        <xpath expr="//th[@name='th_quantity']" position="before">
+            <th class="text-center"><span>Deposit Amount</span></th>
+            <th class="text-center"><span>Subs Fee</span></th>
+            <th class="text-center"><span>Extra Amount</span></th>
+            <th class="text-center"><span>Start Date</span></th>
+            <th class="text-center"><span>End Date</span></th>
+        </xpath>
+
+        <!-- Add new fields in the table body -->
+        <xpath expr="//td[@name='td_quantity']" position="before">
+            <td class="text-end">
+                <span t-field="line.deposit_amount" t-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/>
+            </td>
+            <td class="text-end">
+                <span t-field="line.subscription_fee" t-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/>
+            </td>
+            <td class="text-end">
+                <span t-field="line.extra_amount" t-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/>
+            </td>
+            <td class="text-end">
+                <span t-field="line.start_date"/>
+            </td>
+            <td class="text-end">
+                <span t-field="line.end_date"/>
+            </td>
+        </xpath>
+
+    <xpath expr="//th[@name='th_priceunit']" position="attributes">
+        <attribute name="t-if">False</attribute>
+    </xpath>
+    <xpath expr="//td[@name='td_price_unit']" position="attributes">
+        <attribute name="t-if">False</attribute>
+    </xpath>
+    <xpath expr="//th[@name='th_taxes']" position="attributes">
+        <attribute name="t-if">False</attribute>
+    </xpath>
+    <xpath expr="//td[@name='td_taxes']" position="attributes">
+        <attribute name="t-if">False</attribute>
+    </xpath>
+
+        <xpath expr="//tr[td[contains(text(), 'Amount Due')]]" position="replace">
+            <tr>
+                <td>Amount Due</td>
+                <td class="text-end">
+                    <span t-field="o.amount_due" t-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/>
+                </td>
+            </tr>
+        </xpath>
+
+        <xpath expr="//th[@name='th_quantity']" position="replace">
+            <th name="th_total_month" class="text-center"><span>Total Months</span></th>
+        </xpath>
+
+        <!-- Replace the table data for "Quantity" -->
+        <xpath expr="//td[@name='td_quantity']" position="replace">
+            <td name="td_total_months" class="text-end">
+                <span t-field="line.total_months">3</span>
+            </td>
+        </xpath>
+
+    </template>
+
+
+<!--
+    <record id="view_sale_order_tree" model="ir.ui.view">
+        <field name="name">sale.order.tree</field>
+        <field name="model">sale.order</field>
+        <field name="arch" type="xml">
+            <tree string="Quotations">
+                <field name="name"/>
+                <field name="date_order"/>
+                <field name="partner_id"/>
+                <field name="user_id"/>
+                <field name="amount_total" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                <field name="state"/>
+            </tree>
+        </field>
+    </record>
+-->
+
+
+<!--
+        <record id="member_payment_base_amount" model="ir.asset">
+        <field name="name">Member Payment Base amount</field>
+        <field name="bundle">web.assets_backend</field>
+        <field name="active" eval="True"/>
+        <field name="sequence" eval="10"/>
+        <field name="target">backend</field>
+        <field name="path">/etohobil/static/src/js/sync_amount.js</field>
+    </record>
+-->
+
+
+
+</odoo>
+
+

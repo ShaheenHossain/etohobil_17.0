@@ -1,0 +1,56 @@
+<!--<odoo>
+    <record id="view_member_payment_history_form" model="ir.ui.view">
+        <field name="name">member.payment.history.form</field>
+        <field name="model">member.payment.history</field>
+        <field name="arch" type="xml">
+            <form string="Member Payment History">
+                <group>
+                    <field name="member_id"/>
+                    <field name="deposit_amount"/>
+                    <field name="start_date"/>
+                    <field name="end_date"/>
+                </group>
+                <group>
+                    <field name="total_years"/>
+                    <field name="total_months"/>
+                    <field name="subtotal_amount"/>
+                    <field name="subtotal_subscription_amount"/>
+                    <field name="total_amount_with_subscription"/>
+                    <field name="base_amount"/>
+                </group>
+                <group>
+                    <field name="monthly_increment"/>
+                    <field name="amount_paid"/>
+                    <field name="due_amount"/>
+                    <field name="advance_amount"/>
+                    <field name="status"/>
+                </group>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_member_payment_history_tree" model="ir.ui.view">
+        <field name="name">member.payment.history.tree</field>
+        <field name="model">member.payment.history</field>
+        <field name="arch" type="xml">
+            <tree string="Member Payment History">
+                <field name="member_id"/>
+                <field name="deposit_amount"/>
+                <field name="start_date"/>
+                <field name="end_date"/>
+                <field name="total_years"/>
+                <field name="total_months"/>
+                <field name="subtotal_amount"/>
+                <field name="subtotal_subscription_amount"/>
+                <field name="total_amount_with_subscription"/>
+                <field name="base_amount"/>
+                <field name="monthly_increment"/>
+                <field name="amount_paid"/>
+                <field name="due_amount"/>
+                <field name="advance_amount"/>
+                <field name="status"/>
+            </tree>
+        </field>
+    </record>
+
+</odoo>-->

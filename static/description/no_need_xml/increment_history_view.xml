@@ -1,0 +1,44 @@
+<odoo>
+    <record id="view_member_increment_history_form" model="ir.ui.view">
+        <field name="name">payment.increment.history.form</field>
+        <field name="model">payment.increment.history</field>
+        <field name="arch" type="xml">
+            <form string="Increment History">
+                <group>
+                    <field name="member_id"/>
+                    <field name="increment_amount"/>
+                    <field name="start_date"/>
+                    <field name="end_date"/>
+                </group>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_member_increment_history_tree" model="ir.ui.view">
+        <field name="name">payment.increment.history.tree</field>
+        <field name="model">payment.increment.history</field>
+        <field name="arch" type="xml">
+            <tree string="Increment History">
+                <field name="member_id"/>
+                <field name="increment_amount"/>
+                <field name="start_date"/>
+                <field name="end_date"/>
+            </tree>
+        </field>
+    </record>
+
+
+    <record id="view_member_form_inherit_increment_history" model="ir.ui.view">
+        <field name="name">etohobil.member.form.inherit.increment.history</field>
+        <field name="model">etohobil.member</field>
+        <field name="inherit_id" ref="etohobil.view_member_form"/>
+        <field name="arch" type="xml">
+            <notebook position="inside">
+                <page string="Increment History">
+                    <field name="increment_history_ids" widget="one2many"/>
+                </page>
+            </notebook>
+        </field>
+    </record>
+
+</odoo>
